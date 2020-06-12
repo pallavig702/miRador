@@ -878,7 +878,7 @@ def annotateCandidates(outputFolder, similarityDict, organism, mirBaseDict,
         identicalFlag = False
         similarFlag = False
         validatedFlag = False
-
+        lenOfpre_AnnotatedLine=len(line)
         # Check if the candidate miRNA name is in the similarityDict
         # to determine if it is completely novel or not
         if(mirName in similarityDict):
@@ -965,8 +965,8 @@ def annotateCandidates(outputFolder, similarityDict, organism, mirBaseDict,
                                 classificationCountsList[3] += 1
 
                             similarFlag = True
-                            line.append("Conserved family of the following:")
-                            line.append(mirFamily)
+                            #line.append("Conserved family of the following:")
+                            #line.append(mirFamily)
 
                             toWrite = ""
                             # Add the list of organismList with this same
@@ -978,9 +978,9 @@ def annotateCandidates(outputFolder, similarityDict, organism, mirBaseDict,
                                     toWrite += "%s" % similarOrganism
                                 else:
                                     toWrite += "%s " % similarOrganism
-
-                            line.append(toWrite)
-
+                            line.append("Conserved family of the following-"+mirFamily+":"+toWrite)
+                            #line.append(toWrite)
+                                                        
                 # If similar flag got set, then we met the replication
                 # requirement was met and this should be added
                 if(similarFlag):
@@ -988,7 +988,10 @@ def annotateCandidates(outputFolder, similarityDict, organism, mirBaseDict,
                         if i == len(line) - 1:
                             annotatedOut.write("%s\n" % line[i])
                         else:
-                            annotatedOut.write("%s," % line[i]) 
+                            if(i<lenOfpre_AnnotatedLine):
+                                annotatedOut.write("%s," % line[i])
+                            elif(i>=lenOfpre_AnnotatedLine):
+                                annotatedOut.write("%s;" % line[i])                                
 
                     # Write the sequence to the FASTA file
                     fastaOut.write(">%s\n%s\n" % (line[mirNameIndex],
